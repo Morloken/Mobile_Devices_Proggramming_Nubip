@@ -5,26 +5,43 @@
     android:padding="16dp"
     android:orientation="vertical">
 
+    <!-- Проміжок табуляції -->
+    <EditText
+        android:id="@+id/inputStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Початок проміжку"
+        android:inputType="numberSigned|numberDecimal"/>
+
+    <EditText
+        android:id="@+id/inputEnd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Кінець проміжку"
+        android:inputType="numberSigned|numberDecimal"/>
+
+    <EditText
+        android:id="@+id/inputStep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Крок табуляції"
+        android:inputType="numberDecimal"/>
+
+
+    <!-- Значення y -->
     <EditText
         android:id="@+id/inputY"
         android:layout_width="match_parent"
         android:layout_height="83dp"
         android:hint="Введіть y"
-        android:inputType="numberDecimal" />
+        android:inputType="numberSigned|numberDecimal" />
 
+    <!-- Кнопки -->
     <Button
         android:id="@+id/btnCalc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Обчислити K"
-        android:layout_marginTop="12dp"/>
-
-    <TextView
-        android:id="@+id/resultView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Результат з'явиться тут"
-        android:textSize="18sp"
         android:layout_marginTop="12dp"/>
 
     <Button
@@ -33,4 +50,18 @@
         android:layout_height="wrap_content"
         android:text="Про автора"
         android:layout_marginTop="16dp"/>
+    <Button
+        android:id="@+id/btnReadFile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Відкрити файл"/>
+    <TextView
+        android:id="@+id/resultView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Результат з'явиться тут"
+        android:textSize="18sp"
+        android:layout_marginTop="12dp"/>
+
+
 </LinearLayout>
