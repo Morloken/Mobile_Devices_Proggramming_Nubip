@@ -78,6 +78,11 @@ class MainActivity : ComponentActivity() {
             val content = file.readText()
             resultView.text = content
         }
+        // --- Перехід на графік ---
+        btnGraph.setOnClickListener {
+            val intent = Intent(this, GraphActivity::class.java)
+            startActivity(intent)
+        }
 
         btnAuthor.setOnClickListener {
             startActivity(Intent(this, AuthorActivity::class.java))
