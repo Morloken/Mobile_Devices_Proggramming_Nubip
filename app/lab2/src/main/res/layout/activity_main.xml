@@ -1,17 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical">
+
+    <!-- Кнопка для переходу на графік -->
     <Button
         android:id="@+id/btnGraph"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Побудувати графік"
-        android:layout_marginTop="16dp"
-        android:layout_gravity="center_horizontal"/>
-    <!-- Проміжок табуляції -->
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- TabLayout -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:tabIndicatorColor="@android:color/white"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextColor="@android:color/darker_gray"
+        app:tabGravity="fill"
+        app:tabMode="fixed"/>
+
+
+    <!-- ViewPager2 для вкладок -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Поля введення для обчислень -->
     <EditText
         android:id="@+id/inputStart"
         android:layout_width="match_parent"
@@ -33,16 +58,14 @@
         android:hint="Крок табуляції"
         android:inputType="numberDecimal"/>
 
-
-    <!-- Значення y -->
     <EditText
         android:id="@+id/inputY"
         android:layout_width="match_parent"
-        android:layout_height="83dp"
+        android:layout_height="wrap_content"
         android:hint="Введіть y"
-        android:inputType="numberSigned|numberDecimal" />
+        android:inputType="numberSigned|numberDecimal"/>
 
-    <!-- Кнопки -->
+    <!-- Кнопки обчислення та автора -->
     <Button
         android:id="@+id/btnCalc"
         android:layout_width="match_parent"
@@ -55,12 +78,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Про автора"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="12dp"/>
+
     <Button
         android:id="@+id/btnReadFile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Відкрити файл"/>
+        android:text="Відкрити файл"
+        android:layout_marginTop="12dp"/>
+
     <TextView
         android:id="@+id/resultView"
         android:layout_width="match_parent"
@@ -68,6 +94,4 @@
         android:text="Результат з'явиться тут"
         android:textSize="18sp"
         android:layout_marginTop="12dp"/>
-
-
 </LinearLayout>

@@ -1,5 +1,5 @@
 package com.example.lab2
-
+import androidx.viewpager2.widget.ViewPager2
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -11,8 +11,11 @@ import kotlin.math.atan
 import kotlin.math.ln
 import kotlin.math.sqrt
 import kotlin.math.abs
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +33,13 @@ class MainActivity : ComponentActivity() {
 
         val a = 2.0
         val b = 3.0
-        //val x = 5.0
-
         val filename = "results.txt"
+
+        // Адаптер для вкладок
+        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
+        val adapter = ViewPagerAdapter(this)
+        viewPager.adapter = adapter
+
 
         btnCalc.setOnClickListener {
             val y = inputY.text.toString().toDoubleOrNull()
@@ -58,7 +65,6 @@ class MainActivity : ComponentActivity() {
             file.printWriter().use { out ->
                 var xi = start!!
                 while (xi <= end!!) {
-                    // 🔥 Змінив numerator, щоб графік залежав від xi
                     val numerator = sqrt(xi + b - a) + ln(y!!)
                     val denominator = atan(b + a)
                     val k = numerator / denominator
@@ -76,14 +82,11 @@ class MainActivity : ComponentActivity() {
                 resultView.text = "Файл ще не створено"
                 return@setOnClickListener
             }
-            val content = file.readText()
-            resultView.text = content
+            resultView.text = file.readText()
         }
 
-        // --- Перехід на графік ---
         btnGraph.setOnClickListener {
-            val intent = Intent(this, GraphActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, GraphActivity::class.java))
         }
 
         btnAuthor.setOnClickListener {
