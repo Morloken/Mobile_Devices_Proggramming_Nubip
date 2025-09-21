@@ -25,7 +25,7 @@
         </activity>
         <activity android:name=".AuthorActivity"/>
 
-
+        <activity android:name=".GraphActivity" />
     </application>
 
 </manifest>

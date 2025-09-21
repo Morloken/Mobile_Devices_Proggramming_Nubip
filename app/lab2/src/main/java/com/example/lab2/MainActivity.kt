@@ -25,11 +25,12 @@ class MainActivity : ComponentActivity() {
         val btnCalc = findViewById<Button>(R.id.btnCalc)
         val btnReadFile = findViewById<Button>(R.id.btnReadFile)
         val btnAuthor = findViewById<Button>(R.id.btnAuthor)
+        val btnGraph = findViewById<Button>(R.id.btnGraph)
         val resultView = findViewById<TextView>(R.id.resultView)
 
-        val x = 5.0
         val a = 2.0
         val b = 3.0
+        //val x = 5.0
 
         val filename = "results.txt"
 
@@ -45,7 +46,6 @@ class MainActivity : ComponentActivity() {
                 if (end == null) add("Кінець проміжку не число")
                 if (step == null || step <= 0) add("Крок > 0")
                 if (y != null && y <= 0.0) add("y має бути > 0 (бо ln(y))")
-                if (x + b - a < 0.0) add("x + b - a ≥ 0 (бо √)")
                 if (abs(atan(b + a)) < 1e-12) add("arctg(b+a) ≈ 0 → ділення на нуль")
             }
 
@@ -58,7 +58,8 @@ class MainActivity : ComponentActivity() {
             file.printWriter().use { out ->
                 var xi = start!!
                 while (xi <= end!!) {
-                    val numerator = sqrt(x + b - a) + ln(y!!)
+                    // 🔥 Змінив numerator, щоб графік залежав від xi
+                    val numerator = sqrt(xi + b - a) + ln(y!!)
                     val denominator = atan(b + a)
                     val k = numerator / denominator
                     out.println("$xi $k")
@@ -78,6 +79,7 @@ class MainActivity : ComponentActivity() {
             val content = file.readText()
             resultView.text = content
         }
+
         // --- Перехід на графік ---
         btnGraph.setOnClickListener {
             val intent = Intent(this, GraphActivity::class.java)

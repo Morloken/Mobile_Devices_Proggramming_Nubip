@@ -4,7 +4,13 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical">
-
+    <Button
+        android:id="@+id/btnGraph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Побудувати графік"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center_horizontal"/>
     <!-- Проміжок табуляції -->
     <EditText
         android:id="@+id/inputStart"
