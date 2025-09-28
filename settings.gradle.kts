@@ -27,3 +27,4 @@ dependencyResolutionManagement {
 rootProject.name = "Mobile Devices Proggramming Nubip"
 include(":app")
 include(":app:lab2")
+include(":imageviewer")
