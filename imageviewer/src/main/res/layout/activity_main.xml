@@ -13,10 +13,45 @@
         android:text="Вибрати папку з картинками" />
 
     <Button
+        android:id="@+id/btnViewAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Подивитися всі зображення"
+        android:layout_marginTop="16dp" />
+
+    <Button
         android:id="@+id/btnAuthor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Про автора" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFolders"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"/>
+
+    <CheckBox
+        android:id="@+id/cbJpg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=".jpg"
+        android:checked="true"/>
+
+    <CheckBox
+        android:id="@+id/cbPng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=".png"
+        android:checked="true"/>
+
+    <CheckBox
+        android:id="@+id/cbTiff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=".tiff"
+        android:checked="true"/>
 
 </LinearLayout>
