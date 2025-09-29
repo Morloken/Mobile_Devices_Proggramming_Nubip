@@ -4,27 +4,23 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
-import android.widget.CheckBox
+import android.provider.OpenableColumns
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
     private val REQUEST_CODE_PICK_FOLDER = 1001
 
-    // всі можливі формати
     private val allExtensions = listOf("jpg", "png", "tiff")
     private var allowedExtensions = allExtensions.toMutableList()
 
-    // список усіх картинок з усіх папок
     private val allImageUris = ArrayList<String>()
-
-    // список вибраних папок
     private val selectedFolders = ArrayList<FolderItem>()
-
     private lateinit var folderAdapter: FolderAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +35,13 @@ class MainActivity : AppCompatActivity() {
         val cbJpg = findViewById<CheckBox>(R.id.cbJpg)
         val cbPng = findViewById<CheckBox>(R.id.cbPng)
         val cbTiff = findViewById<CheckBox>(R.id.cbTiff)
+
+        // Spinner для сортування
+        val spinnerSort = findViewById<Spinner>(R.id.spinnerSort)
+        val sortOptions = listOf("Name", "Date", "Size")
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, sortOptions)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerSort.adapter = spinnerAdapter
 
         // динамічний фільтр через чекбокси
         val checkBoxes = mapOf(
@@ -56,9 +59,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // налаштування списку вибраних папок
+        // список вибраних папок
         folderAdapter = FolderAdapter(selectedFolders) { folder ->
-            // видаляємо папку при натисканні на хрестик
             selectedFolders.remove(folder)
             allImageUris.removeAll(folder.imageUris)
             folderAdapter.notifyDataSetChanged()
@@ -67,30 +69,33 @@ class MainActivity : AppCompatActivity() {
         rvFolders.layoutManager = LinearLayoutManager(this)
         rvFolders.adapter = folderAdapter
 
-        // вибір папки
         btnChooseFolder.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
             startActivityForResult(intent, REQUEST_CODE_PICK_FOLDER)
         }
 
-        // відкриття автора
         btnAuthor.setOnClickListener {
             startActivity(Intent(this, AuthorActivity::class.java))
         }
 
-        // перегляд усіх вибраних папок
         btnViewAll.setOnClickListener {
-            val filteredImages = allImageUris.filter { uri ->
-                allowedExtensions.any { ext -> uri.endsWith(".$ext", ignoreCase = true) }
+            val filteredImages = allImageUris
+                .mapNotNull { getImageMetadata(Uri.parse(it)) }
+                .filter { allowedExtensions.any { ext -> it.name.endsWith(".$ext", ignoreCase = true) } }
+
+            val sortedImages = when (spinnerSort.selectedItem.toString()) {
+                "Name" -> filteredImages.sortedBy { it.name.lowercase() }
+                "Date" -> filteredImages.sortedBy { it.dateModified }
+                "Size" -> filteredImages.sortedBy { it.size }
+                else -> filteredImages
             }
 
-            if (filteredImages.isNotEmpty()) {
+            if (sortedImages.isNotEmpty()) {
                 val intent = Intent(this, ImageViewerActivity::class.java)
-                intent.putStringArrayListExtra("imageList", ArrayList(filteredImages))
+                intent.putStringArrayListExtra("imageList", ArrayList(sortedImages.map { it.uri.toString() }))
                 startActivity(intent)
             }
         }
-
     }
 
     @Deprecated("Deprecated in Java")
@@ -121,4 +126,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun getImageMetadata(uri: Uri): ImageMetadata? {
+        contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                val name = if (nameIndex >= 0) cursor.getString(nameIndex) else "Unknown"
+                val size = if (sizeIndex >= 0) cursor.getLong(sizeIndex) else 0L
+                val dateModified = File(uri.path ?: "").lastModified()
+                return ImageMetadata(uri, name, size, dateModified)
+            }
+        }
+        return null
+    }
+
+    data class ImageMetadata(
+        val uri: Uri,
+        val name: String,
+        val size: Long,
+        val dateModified: Long
+    )
 }
