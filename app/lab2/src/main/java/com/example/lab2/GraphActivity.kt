@@ -46,6 +46,7 @@ class GraphActivity : ComponentActivity() {
                     lineWidth = 2f
                     setDrawCircles(true)
                     setDrawValues(false)
+
                 }
                 chart.data = LineData(dataSet)
                 chart.description.isEnabled = false
